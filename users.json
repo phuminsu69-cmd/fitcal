@@ -1,0 +1,8 @@
+{
+  "uuu": {
+    "password": "scrypt:32768:8:1$Piu0FJStVX2fxWpm$9bdf7da8de8ad58a11f2d790200be00d11f92d7cee51f32b172e9420650c991f25cc8050a436559f677c0fff67dcd40d6d53089e65681c7d3be6a4508e87a828"
+  },
+  "รรร": {
+    "password": "scrypt:32768:8:1$JKtthZMs6RXrPOMf$2877888c30e38fbe0187e93aa4b505f9d10739ac181d62a8bdbd974eaa74175caefd03f4398a75e44ef075a8d5b0d9e6bc60863e94c1ff02a93b7b11f9cd5c66"
+  }
+}

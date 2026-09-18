@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+*.pyc
+fitcalc.db
+.env
+serviceAccountKey.json
+Dockerfile*
+!.dockerignore
+firebase-debug.log
+.DS_Store
+Thumbs.db
+# uploaded photos are named <name>-<timestamp>.<ext>; keep them small or ignore them:
+# static/img/*-1*.jpg

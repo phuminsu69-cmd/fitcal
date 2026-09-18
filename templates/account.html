@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="account-hero"><span class="eyebrow">ACCOUNT SETTINGS</span><h1>โปรไฟล์ผู้ใช้</h1><p>จัดการบัญชีและความปลอดภัยของคุณ</p></section>
+{% if error %}<div class="account-message error">{{ error }}</div>{% endif %}
+{% if message %}<div class="account-message success">{{ message }}</div>{% endif %}
+<div class="account-grid">
+  <form class="panel account-card" method="post"><input type="hidden" name="action" value="rename"><h2>แก้ไขชื่อผู้ใช้</h2><p>ชื่อผู้ใช้ปัจจุบัน: <strong>{{ username }}</strong></p><label for="username">ชื่อผู้ใช้ใหม่</label><input id="username" name="username" value="{{ username }}" minlength="3" required><button class="btn" type="submit">บันทึกชื่อผู้ใช้</button></form>
+  <form class="panel account-card" method="post"><input type="hidden" name="action" value="password"><h2>เปลี่ยนรหัสผ่าน</h2><label for="current-password">รหัสผ่านเดิม</label><input id="current-password" name="current_password" type="password" required><label for="new-password">รหัสผ่านใหม่</label><input id="new-password" name="new_password" type="password" minlength="6" required><label for="confirm-password">ยืนยันรหัสผ่านใหม่</label><input id="confirm-password" name="confirm_password" type="password" minlength="6" required><button class="btn" type="submit">เปลี่ยนรหัสผ่าน</button></form>
+  <form class="panel account-card account-danger" method="post"><input type="hidden" name="action" value="logout_all"><h2>ออกจากระบบทุกอุปกรณ์</h2><p>ยกเลิกการเข้าสู่ระบบของบัญชีนี้ในทุกเบราว์เซอร์</p><button class="btn ghost" type="submit">ออกจากระบบทั้งหมด</button></form>
+  <form class="panel account-card account-danger" method="post" onsubmit="return confirm('การลบบัญชีไม่สามารถย้อนกลับได้ ต้องการดำเนินการต่อหรือไม่?');"><input type="hidden" name="action" value="delete"><h2>ลบบัญชี</h2><p>ข้อมูลสุขภาพและข้อมูลบัญชีจะถูกลบถาวร</p><label for="delete-confirm">พิมพ์ ลบบัญชี เพื่อยืนยัน</label><input id="delete-confirm" name="confirm" required><button class="btn danger" type="submit">ลบบัญชีถาวร</button></form>
+</div>
+{% endblock %}

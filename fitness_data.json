@@ -1,0 +1,57 @@
+{
+  "uuu": {
+    "calorie_logs": {
+      "2026-09-16": [
+        {
+          "id": 1,
+          "food": "à¸‚à¹‰à¸²à¸§à¸œà¸±à¸”",
+          "calories": 400,
+          "meal": "à¹€à¸Šà¹‰à¸²"
+        },
+        {
+          "id": 2,
+          "food": "gkjldj",
+          "calories": 500,
+          "meal": "à¹€à¸Šà¹‰à¸²"
+        }
+      ]
+    },
+    "progress": {
+      "1": false,
+      "3": false,
+      "2": false,
+      "7": false,
+      "4": false,
+      "30": false,
+      "5": false
+    },
+    "calories": [],
+    "profile": {
+      "name": "ทททท",
+      "age": "12",
+      "gender": "ชาย",
+      "height": "112",
+      "weight": "54",
+      "goal": ""
+    }
+  },
+  "รรร": {
+    "progress": {
+      "1": false,
+      "3": false,
+      "2": false
+    },
+    "calories": [],
+    "measurements": [],
+    "profile": {
+      "name": "นุ",
+      "age": "19",
+      "gender": "ชาย",
+      "height": "168",
+      "weight": "50",
+      "goal": "เพิ่มกล้ามเนื้อ",
+      "activity": "กลาง"
+    },
+    "workout_duration": 7
+  }
+}

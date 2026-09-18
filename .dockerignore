@@ -1,0 +1,10 @@
+.env
+serviceAccountKey.json
+fitcalc.db
+.venv
+__pycache__
+*.pyc
+.git
+.pytest_cache
+static/img/*
+!static/img/*.svg

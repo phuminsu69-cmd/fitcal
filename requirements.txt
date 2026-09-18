@@ -1,0 +1,4 @@
+flask
+pytest
+firebase-admin
+gunicorn

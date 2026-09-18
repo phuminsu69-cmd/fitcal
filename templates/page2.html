@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="calorie-hero">
+  <div><span class="eyebrow">DAILY NUTRITION</span><h1>บันทึกแคลอรี่ประจำวัน</h1><p>ติดตามสิ่งที่คุณกินในแต่ละวัน เพื่อดูแลสุขภาพได้อย่างมีเป้าหมาย</p></div>
+  <div class="calorie-total"><span>แคลอรี่วันที่เลือก</span><strong>{{ total }}</strong><small>kcal</small></div>
+</section>
+<section class="calorie-summary panel">
+  <div class="date-picker"><label for="selected-date">เลือกวันที่</label><input id="selected-date" type="date" value="{{ selected_date }}"></div>
+  <div class="daily-stat"><small>กินแล้ว</small><strong>{{ total }} <b>kcal</b></strong></div>
+  <div class="daily-stat"><small>เป้าหมาย</small><strong>{{ calorie_goal or '-' }} <b>kcal</b></strong></div>
+  <div class="daily-stat {{ 'over' if over_goal else '' }}"><small>{{ 'เกินเป้าหมาย' if over_goal else 'เหลือ' }}</small><strong>{{ total - calorie_goal if over_goal else (remaining if remaining is not none else '-') }} <b>kcal</b></strong></div>
+  <div class="daily-progress"><div class="progress-label"><span>ความคืบหน้าของวัน</span><strong>{{ calorie_percent }}%</strong></div><div class="daily-progress-track"><i style="width: {{ calorie_percent }}%;"></i></div></div>
+</section>
+<div class="calorie-layout">
+  <section class="panel food-camera">
+    <div class="section-heading"><div><h2>วิเคราะห์จากรูปอาหาร</h2><p>ถ่ายรูปหรือเลือกรูป แล้วให้ AI ประเมินแคลอรี่</p></div><span class="camera-symbol">⌾</span></div>
+    <input id="food-photo" class="photo-input" type="file" accept="image/*" capture="environment">
+    <label class="camera-drop" for="food-photo"><span>📷</span><strong>ถ่ายรูป / เลือกรูปอาหาร</strong><small>รองรับ JPG, PNG ขนาดไม่เกิน 5 MB</small></label>
+    <img id="food-preview" class="food-preview" alt="ตัวอย่างรูปอาหาร">
+    <button id="analyze-food" class="btn analyze-btn" type="button" disabled>วิเคราะห์แคลอรี่ <span>✦</span></button>
+    <p id="analysis-status" class="analysis-status" role="status"></p>
+    <small class="analysis-help">หากขึ้นว่าไม่พบ API key ให้สร้างไฟล์ <code>.env</code> ในโฟลเดอร์โปรเจกต์ แล้วรีสตาร์ทเซิร์ฟเวอร์</small>
+  </section>
+  <form class="panel calorie-form" method="post">
+    <input type="hidden" name="date" value="{{ selected_date }}">
+    <div class="section-heading"><div><h2>เพิ่มรายการอาหาร</h2><p>บันทึกมื้ออาหารของคุณ</p></div><span class="section-number">01</span></div>
+    <div class="calorie-fields">
+      <div class="field field-wide"><label for="food">ชื่ออาหาร</label><input id="food" name="food" placeholder="เช่น ข้าวผัดกุ้ง" required></div>
+      <div class="field"><label for="meal">มื้ออาหาร</label><select id="meal" name="meal"><option>เช้า</option><option>กลางวัน</option><option>เย็น</option><option>ของว่าง</option></select></div>
+      <div class="field"><label for="calories">แคลอรี่ <small>kcal</small></label><input id="calories" name="calories" type="number" min="0" placeholder="เช่น 450" required></div>
+    </div>
+    <button class="btn calorie-add" type="submit">เพิ่มรายการ <span>＋</span></button>
+  </form>
+  <aside class="calorie-tip"><span class="tip-mark">♥</span><h3>กินอย่างสมดุล</h3><p>ลองบันทึกทุกมื้อ เพื่อมองเห็นพฤติกรรมการกินและวางแผนได้ดีขึ้น</p><div class="tip-line"></div><small>บันทึกเล็ก ๆ สร้างความเปลี่ยนแปลงที่ยิ่งใหญ่</small></aside>
+</div>
+<section class="panel calorie-history"><div class="section-heading"><div><h2>รายการอาหารวันที่ {{ selected_date }}</h2><p>แก้ไขรายการได้หาก AI ประเมินคลาดเคลื่อน</p></div><span class="history-count">{{ entries|length }} รายการ</span></div>
+{% if entries %}<div class="food-list">{% for row in entries %}{% set item = row.item %}<div class="food-row"><div class="food-icon">{% if item.meal == 'เช้า' %}☀{% elif item.meal == 'กลางวัน' %}◉{% elif item.meal == 'เย็น' %}☾{% else %}✦{% endif %}</div><div class="food-info"><strong>{{ item.food }}</strong><span>{{ item.meal }}</span></div><strong class="food-calories">{{ item.calories }} <small>kcal</small></strong><button class="edit-food-toggle" type="button" onclick="this.parentElement.classList.toggle('editing')">แก้ไข</button><form method="post" class="inline delete-form"><input type="hidden" name="action" value="delete"><input type="hidden" name="index" value="{{ row.index }}"><button class="delete-food" type="submit" aria-label="ลบรายการ">×</button></form><form method="post" class="edit-food-form"><input type="hidden" name="action" value="edit"><input type="hidden" name="index" value="{{ row.index }}"><input type="hidden" name="date" value="{{ selected_date }}"><input name="food" value="{{ item.food }}" required><select name="meal"><option {% if item.meal == 'เช้า' %}selected{% endif %}>เช้า</option><option {% if item.meal == 'กลางวัน' %}selected{% endif %}>กลางวัน</option><option {% if item.meal == 'เย็น' %}selected{% endif %}>เย็น</option><option {% if item.meal == 'ของว่าง' %}selected{% endif %}>ของว่าง</option></select><input name="calories" type="number" min="0" value="{{ item.calories }}" required><button class="btn small" type="submit">บันทึก</button></form></div>{% endfor %}</div>{% else %}<div class="empty calorie-empty"><div>🍽</div><p>ยังไม่มีรายการอาหาร</p><small>เริ่มบันทึกมื้อแรกของคุณได้เลย</small></div>{% endif %}</section>
+<script>document.getElementById("selected-date").addEventListener("change", function () { window.location.href = "/page2?date=" + encodeURIComponent(this.value); });</script>
+<script>
+(() => {
+  const input = document.getElementById("food-photo");
+  const preview = document.getElementById("food-preview");
+  const button = document.getElementById("analyze-food");
+  const status = document.getElementById("analysis-status");
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    button.disabled = !file;
+    status.textContent = "";
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.classList.add("visible");
+    }
+  });
+  button.addEventListener("click", async () => {
+    const file = input.files[0];
+    if (!file) return;
+    button.disabled = true;
+    button.classList.add("loading");
+    status.textContent = "กำลังวิเคราะห์รูปอาหาร...";
+    const data = new FormData();
+    data.append("photo", file);
+    try {
+      const response = await fetch("/api/analyze-food", { method: "POST", body: data });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "วิเคราะห์ไม่สำเร็จ");
+      document.getElementById("food").value = result.food;
+      document.getElementById("calories").value = result.calories;
+      status.textContent = `${result.food} ประมาณ ${result.calories} kcal${result.serving ? ` (${result.serving})` : ""} — ${result.note}`;
+      status.className = "analysis-status success";
+    } catch (error) {
+      status.textContent = error.message;
+      status.className = "analysis-status error";
+    } finally {
+      button.disabled = false;
+      button.classList.remove("loading");
+    }
+  });
+})();
+</script>
+{% endblock %}

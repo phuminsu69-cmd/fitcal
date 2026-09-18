@@ -1,0 +1,48 @@
+{% extends "auth_base.html" %}
+{% block auth_content %}
+<div class="auth-card">
+  <div class="auth-tabs" role="tablist" aria-label="การยืนยันตัวตน">
+    <button type="button" class="auth-tab" data-auth-mode="login">เข้าสู่ระบบ</button>
+    <button type="button" class="auth-tab" data-auth-mode="register">สมัครสมาชิก</button>
+  </div>
+  <form class="auth-panel" data-auth-panel="login" method="post" action="{{ url_for('login') }}">
+    <h2>เข้าสู่ระบบ</h2>
+    {% if error and not register_mode %}<div class="auth-error">{{ error }}</div>{% endif %}
+    <input type="hidden" name="next" value="{{ next_url }}">
+    <label for="login-username">ชื่อผู้ใช้</label>
+    <input id="login-username" name="username" type="text" autocomplete="username" required>
+    <label for="login-password">รหัสผ่าน</label>
+    <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">เข้าสู่ระบบ</button>
+  </form>
+  <form class="auth-panel" data-auth-panel="register" method="post" action="{{ url_for('register') }}">
+    <h2>สมัครสมาชิก</h2>
+    {% if error and register_mode %}<div class="auth-error">{{ error }}</div>{% endif %}
+    <label for="register-username">ชื่อผู้ใช้</label>
+    <input id="register-username" name="username" type="text" autocomplete="username" minlength="3" required>
+    <label for="register-password">รหัสผ่าน</label>
+    <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+    <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+    <input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" minlength="6" required>
+    <button type="submit">สร้างบัญชี</button>
+  </form>
+</div>
+<script>
+  (() => {
+    const tabs = document.querySelectorAll("[data-auth-mode]");
+    const panels = document.querySelectorAll("[data-auth-panel]");
+    const setMode = (mode) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.authMode === mode;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.authPanel !== mode;
+      });
+    };
+    tabs.forEach((tab) => tab.addEventListener("click", () => setMode(tab.dataset.authMode)));
+    setMode("{{ 'register' if register_mode else 'login' }}");
+  })();
+</script>
+{% endblock %}

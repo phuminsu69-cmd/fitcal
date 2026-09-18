@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-box">
+  <h1>ติดตามความก้าวหน้า</h1>
+  <p class="lead">บันทึกการเปลี่ยนแปลงและดูผลลัพธ์ของคุณในที่เดียว</p>
+</section>
+
+<section class="stat-grid progress-stats">
+  <div class="stat good"><div class="label">วันที่ออกกำลังกายสำเร็จ</div><div class="value">{{ workout_days }}</div><span class="unit">วัน</span></div>
+  <div class="stat"><div class="label">บันทึกการวัด</div><div class="value">{{ measurements|length }}</div><span class="unit">ครั้ง</span></div>
+</section>
+
+<div class="comparison-charts">
+  <section class="panel progress-chart">
+    <div class="section-title"><h2>แนวโน้มน้ำหนัก</h2><span class="muted">กก.</span></div>
+    {% if weight_points %}
+    <div class="metric-line-chart">
+      <div class="line-grid"></div>
+      {% for point in weight_points %}<div class="metric-point" style="--position: {{ point.position }}%;" title="{{ point.date }}: {{ point.value }} กก."><span class="point-dot"></span><strong>{{ point.value }}<small> kg</small></strong><small>{{ point.date }}</small></div>{% endfor %}
+    </div>
+    {% else %}<p class="empty">ยังไม่มีข้อมูลน้ำหนัก</p>{% endif %}
+  </section>
+  <section class="panel progress-chart">
+    <div class="section-title"><h2>แนวโน้มส่วนสูง</h2><span class="muted">ซม.</span></div>
+    {% if height_points %}
+    <div class="metric-line-chart">
+      <div class="line-grid"></div>
+      {% for point in height_points %}<div class="metric-point" style="--position: {{ point.position }}%;" title="{{ point.date }}: {{ point.value }} ซม."><span class="point-dot height-dot"></span><strong>{{ point.value }}<small> cm</small></strong><small>{{ point.date }}</small></div>{% endfor %}
+    </div>
+    {% else %}<p class="empty">ยังไม่มีข้อมูลส่วนสูง</p>{% endif %}
+  </section>
+</div>
+
+<section class="panel">
+  <div class="progress-section-heading"><div><span class="eyebrow">BODY TRACKING</span><h2>บันทึกน้ำหนักและส่วนสูง</h2><p>บันทึกข้อมูลเป็นระยะเพื่อดูแนวโน้มการเปลี่ยนแปลงของคุณ</p></div><span class="progress-section-icon">↗</span></div>
+  <form class="form-grid progress-form" method="post">
+    <div class="field"><label for="date">วันที่</label><input id="date" name="date" type="date" required></div>
+    <div class="field"><label for="weight">น้ำหนัก (กก.)</label><input id="weight" name="weight" type="number" step="0.1" min="1" required></div>
+    <div class="field"><label for="height">ส่วนสูง (ซม.)</label><input id="height" name="height" type="number" step="0.1" min="1"></div>
+    <button class="btn" type="submit">บันทึกข้อมูล</button>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="progress-section-heading compact"><div><h2>ประวัติการบันทึก</h2><p>ตรวจสอบข้อมูลย้อนหลังได้จากตารางนี้</p></div></div>
+  {% if measurements %}<table class="measurement-table"><tr><th>วันที่</th><th>น้ำหนัก</th><th>ส่วนสูง</th><th></th></tr>
+  {% for item in measurements|reverse %}{% set item_index = measurements|length - loop.index %}<tr><td>{{ item.date }}</td><td><strong>{{ item.weight }}</strong> กก.</td><td>{{ item.height or '-' }} ซม.</td><td><form method="post" class="inline" onsubmit="return confirm('ต้องการลบประวัติรายการนี้หรือไม่?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="index" value="{{ item_index }}"><button class="btn danger small" type="submit">ลบ</button></form></td></tr>{% endfor %}</table>
+  {% else %}<p class="empty">ยังไม่มีประวัติการวัด</p>{% endif %}
+</section>
+
+{% endblock %}

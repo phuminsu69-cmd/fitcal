@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "FitCalc" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-showcase">
+      <div class="auth-mark">F</div>
+      <span class="eyebrow">FITNESS / WELLNESS</span>
+      <h1>FitCalc</h1>
+      <div class="auth-rule"></div>
+      <p>ดูแลสุขภาพของคุณ<br>อย่างมีเป้าหมายและสมดุล</p>
+    </section>
+    <div class="auth-form-wrap">{% block auth_content %}{% endblock %}</div>
+  </main>
+</body>
+</html>

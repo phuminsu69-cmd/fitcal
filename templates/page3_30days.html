@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="workout-page">
+  <div class="workout-heading">
+    <h1>แผนออกกำลังกาย {{ duration }} วัน</h1>
+    <p>เลือกจำนวนวันที่เหมาะกับคุณ แล้วติ๊กวันที่ทำสำเร็จได้จากหน้านี้</p>
+    <a class="btn ghost" href="{{ url_for('page', name='page3') }}">กลับไปตารางออกกำลังกาย</a>
+  </div>
+  <form class="duration-picker panel" method="post">
+    <input type="hidden" name="action" value="set_duration">
+    <div><strong>อยากออกกำลังกายกี่วัน?</strong><small>ปรับแผนให้เข้ากับเป้าหมายของคุณได้เลย</small></div>
+    <select name="duration" aria-label="จำนวนวันออกกำลังกาย">
+      {% for days in [7, 14, 21, 30] %}<option value="{{ days }}" {% if duration == days %}selected{% endif %}>{{ days }} วัน</option>{% endfor %}
+    </select>
+    <button class="btn" type="submit">สร้างแผนใหม่</button>
+  </form>
+  <section class="progress-summary">
+    <h2>สรุปความคืบหน้า</h2>
+    <div class="summary-grid">
+      <div class="progress-donut" style="--progress: {{ progress_percent }};">
+        <div><strong>{{ progress_percent }}%</strong><span>สำเร็จ</span></div>
+      </div>
+      <div class="summary-info">
+        <div class="summary-number">{{ completed_days }} <small>/ {{ duration }} วัน</small></div>
+        <div class="progress-track"><div style="width: {{ progress_percent }}%;"></div></div>
+        <p>{{ advice }}</p>
+      </div>
+    </div>
+    <div class="day-chart" aria-label="แผนภาพวันที่ออกกำลังกายสำเร็จ">
+      {% for day in range(1, duration + 1) %}<span class="{{ 'done' if progress.get(day|string) else '' }}" title="วันที่ {{ day }}"></span>{% endfor %}
+    </div>
+    <div class="chart-legend"><span><i class="done"></i> ทำแล้ว</span><span><i></i> ยังไม่ได้ทำ</span></div>
+  </section>
+  <div class="month-grid">
+    {% for item in plan %}
+    <article class="day-card {{ 'completed' if progress.get(item.day|string) else '' }}">
+      <div class="day-card-header">
+        <strong>วันที่ {{ item.day }}</strong>
+        <form method="post">
+          <input type="hidden" name="day" value="{{ item.day }}">
+          <input type="hidden" name="done" value="{{ 'false' if progress.get(item.day|string) else 'true' }}">
+          <button class="check-button" type="submit">{{ '✓' if progress.get(item.day|string) else '' }}</button>
+        </form>
+      </div>
+      <ul>
+        {% for exercise in item.exercises %}
+        <li>{{ exercise.name }} <small>3x10</small></li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

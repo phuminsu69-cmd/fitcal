@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="profile-hero">
+  <div><span class="eyebrow">MY FITNESS PROFILE</span><h1>ข้อมูลส่วนตัว</h1><p>ตั้งค่าข้อมูลของคุณ เพื่อให้ FitCalc ช่วยติดตามเป้าหมายได้แม่นยำยิ่งขึ้น</p></div>
+  <div class="profile-avatar">✦</div>
+</section>
+<div class="profile-layout">
+  <form class="panel profile-form" method="post">
+    <div class="profile-form-title"><div><h2>แก้ไขข้อมูลของฉัน</h2><p>ข้อมูลทั้งหมดใช้สำหรับการติดตามสุขภาพส่วนตัว</p></div><span>01</span></div>
+    <div class="profile-fields">
+      <div class="field field-wide"><label for="name">ชื่อ-นามสกุล</label><div class="input-wrap">✦<input id="name" name="name" value="{{ profile.get('name', '') }}" placeholder="กรอกชื่อของคุณ" required></div></div>
+      <div class="field"><label for="age">อายุ (ปี)</label><input id="age" name="age" type="number" min="1" value="{{ profile.get('age', '') }}" placeholder="เช่น 20"></div>
+      <div class="field"><label for="gender">เพศ</label><select id="gender" name="gender"><option value="">เลือกเพศ</option><option value="ชาย" {% if profile.get('gender') == 'ชาย' %}selected{% endif %}>ชาย</option><option value="หญิง" {% if profile.get('gender') == 'หญิง' %}selected{% endif %}>หญิง</option><option value="ไม่ระบุ" {% if profile.get('gender') == 'ไม่ระบุ' %}selected{% endif %}>ไม่ระบุ</option></select></div>
+      <div class="field"><label for="height">ส่วนสูง <small>เซนติเมตร</small></label><input id="height" name="height" type="number" min="1" value="{{ profile.get('height', '') }}" placeholder="เช่น 170"></div>
+      <div class="field"><label for="weight">น้ำหนัก <small>กิโลกรัม</small></label><input id="weight" name="weight" type="number" min="1" step="0.1" value="{{ profile.get('weight', '') }}" placeholder="เช่น 65"></div>
+      <div class="field"><label for="activity">ระดับกิจกรรม</label><select id="activity" name="activity"><option value="ต่ำ" {% if profile.get('activity') == 'ต่ำ' %}selected{% endif %}>ต่ำ — ไม่ค่อยออกกำลังกาย</option><option value="กลาง" {% if profile.get('activity', 'กลาง') == 'กลาง' %}selected{% endif %}>กลาง — ออกกำลังกาย 3-5 วัน/สัปดาห์</option><option value="สูง" {% if profile.get('activity') == 'สูง' %}selected{% endif %}>สูง — ออกกำลังกายหนักเกือบทุกวัน</option></select></div>
+      <div class="field field-wide"><label for="goal">เป้าหมายหลัก</label><select id="goal" name="goal" required><option value="">เลือกเป้าหมายที่ต้องการ</option><option value="ลดน้ำหนัก" {% if profile.get('goal') == 'ลดน้ำหนัก' %}selected{% endif %}>ลดน้ำหนัก</option><option value="เพิ่มกล้ามเนื้อ" {% if profile.get('goal') == 'เพิ่มกล้ามเนื้อ' %}selected{% endif %}>เพิ่มกล้ามเนื้อ</option><option value="รักษาน้ำหนัก" {% if profile.get('goal') == 'รักษาน้ำหนัก' %}selected{% endif %}>รักษาน้ำหนัก</option><option value="เพิ่มความฟิต" {% if profile.get('goal') == 'เพิ่มความฟิต' %}selected{% endif %}>เพิ่มความฟิต</option></select></div>
+    </div>
+    <div class="starter-plan">
+      <div class="starter-plan-title"><div><strong>แผนเริ่มต้นวันนี้</strong><small>ดูแลตัวเองทีละก้าว ให้เข้ากับเป้าหมายของคุณ</small></div><span>✦</span></div>
+      <div class="starter-actions"><div><b>⌁</b><span><strong>ขยับร่างกาย</strong><small>อย่างน้อย 20 นาที</small></span></div><div><b>♒</b><span><strong>ดื่มน้ำ</strong><small>6–8 แก้วต่อวัน</small></span></div><div><b>◒</b><span><strong>บันทึกอาหาร</strong><small>ทุกมื้อที่รับประทาน</small></span></div></div>
+    </div>
+    <button class="profile-save btn" type="submit">บันทึกข้อมูล <span>→</span></button>
+  </form>
+  <aside class="profile-side">
+    <div class="profile-side-card"><span class="side-icon">♥</span><h3>เป้าหมายของคุณ</h3><strong>{{ profile.get('goal', 'ยังไม่ได้เลือก') }}</strong><p>ทุกก้าวเล็ก ๆ มีความหมาย เริ่มต้นดูแลตัวเองวันนี้</p></div>
+    <div class="profile-tip"><span>✦</span><div><strong>เคล็ดลับ</strong><p>อัปเดตข้อมูลเป็นระยะ เพื่อให้การติดตามของคุณแม่นยำมากขึ้น</p></div></div>
+    <div class="body-preview">
+      <div class="body-preview-heading"><div><span>BODY PREVIEW</span><h3>เปรียบเทียบรูปร่าง</h3></div><b>✦</b></div>
+      {% if metrics %}
+      <div class="figure-comparison">
+        <div class="figure-column"><span>คุณ</span><div class="body-figure user-figure" style="--body-ratio: {{ metrics.body_ratio }}; --height-ratio: {{ metrics.height_ratio }};" aria-label="หุ่นจำลองตามข้อมูลของคุณ"><i class="figure-head"></i><i class="figure-neck"></i><i class="figure-torso"></i><i class="figure-arm left"></i><i class="figure-arm right"></i><i class="figure-leg left"></i><i class="figure-leg right"></i></div></div>
+        <div class="figure-column"><span>มาตรฐานอายุ {{ profile.get('age') }} ปี</span><div class="body-figure standard-figure" style="--body-ratio: 1; --height-ratio: 1;" aria-label="หุ่นจำลองมาตรฐาน"><i class="figure-head"></i><i class="figure-neck"></i><i class="figure-torso"></i><i class="figure-arm left"></i><i class="figure-arm right"></i><i class="figure-leg left"></i><i class="figure-leg right"></i></div></div>
+      </div>
+      <p class="body-comparison">{{ metrics.body_comparison }} <small>(BMI {{ metrics.bmi }} เทียบค่าอ้างอิง {{ metrics.reference_bmi }})</small></p>
+      {% else %}
+      <div class="body-figure standard-figure" aria-label="หุ่นจำลองมาตรฐาน"><i class="figure-head"></i><i class="figure-neck"></i><i class="figure-torso"></i><i class="figure-arm left"></i><i class="figure-arm right"></i><i class="figure-leg left"></i><i class="figure-leg right"></i></div>
+      {% endif %}
+      <div class="body-stats"><span><small>ส่วนสูง</small><strong>{{ profile.get('height', '-') }} <em>ซม.</em></strong></span><span><small>น้ำหนัก</small><strong>{{ profile.get('weight', '-') }} <em>กก.</em></strong></span></div>
+      <small class="body-disclaimer">ภาพเพื่อการเปรียบเทียบเบื้องต้น ไม่ใช่การวินิจฉัยสุขภาพ</small>
+    </div>
+  </aside>
+</div>
+{% if metrics %}
+<section class="metrics-card">
+  <div class="section-heading"><div><h2>สรุปสุขภาพของคุณ</h2><p>คำนวณจากข้อมูลส่วนตัวและระดับกิจกรรมที่เลือก</p></div><span class="section-number">02</span></div>
+  <div class="metrics-grid">
+    <div class="metric-item"><span class="metric-icon">⚖</span><div><small>BMI</small><strong>{{ metrics.bmi }}</strong><em>{% if metrics.bmi < 18.5 %}ผอม{% elif metrics.bmi < 25 %}ปกติ{% elif metrics.bmi < 30 %}เริ่มเกินมาตรฐาน{% else %}อ้วน{% endif %}</em></div></div>
+    <div class="metric-item"><span class="metric-icon">◌</span><div><small>TDEE</small><strong>{{ metrics.tdee }} <b>kcal</b></strong><em>พลังงานที่ใช้ต่อวัน</em></div></div>
+    <div class="metric-item highlight"><span class="metric-icon">✦</span><div><small>แคลอรี่เป้าหมาย</small><strong>{{ metrics.tdee_adjusted }} <b>kcal</b></strong><em>สำหรับ{{ profile.get('goal') }}</em></div></div>
+  </div>
+  <p class="metrics-note">คำแนะนำเป็นค่าประมาณ: {{ 'ลดจาก TDEE ประมาณ 500 kcal' if profile.get('goal') == 'ลดน้ำหนัก' else 'เพิ่มจาก TDEE ประมาณ 400 kcal' if profile.get('goal') == 'เพิ่มกล้ามเนื้อ' else 'รับประทานใกล้เคียง TDEE เพื่อรักษาระดับปัจจุบัน' }} ควรปรับตามผลลัพธ์จริงและคำแนะนำจากผู้เชี่ยวชาญ</p>
+</section>
+{% else %}
+<div class="metrics-empty">กรอกอายุ เพศ ส่วนสูง และน้ำหนัก แล้วกดบันทึก เพื่อดู BMI และแคลอรี่เป้าหมาย</div>
+{% endif %}
+{% endblock %}

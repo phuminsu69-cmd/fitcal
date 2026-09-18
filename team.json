@@ -1,0 +1,14 @@
+{
+  "group": {
+    "name": "Group 5",
+    "section": "sec 4",
+    "topic": "FitCalc",
+    "description": "เว็บช่วยบันทึกข้อมูลสุขภาพ แคลอรี่ และตารางออกกำลังกาย"
+  },
+  "members": [
+    {"name": "นายพณัศ ปุตรณีอำนาจ", "id": "69130740325", "role": "หัวหน้าทีม", "task": "page1 · ข้อมูลส่วนตัว", "photo": "panat-profile.png"},
+    {"name": "นายภูมินทร์ สู่เสน", "id": "69130740206", "role": "สมาชิก", "task": "page2 · บันทึกแคลอรี่", "photo": "phumin-profile.png"},
+    {"name": "นายศุภโชค สืบเชื้อ", "id": "69130740280", "role": "สมาชิก", "task": "page3 · ตารางออกกำลังกาย", "photo": "supachok-profile.png"},
+    {"name": "นายวันชนะ บุญรอด", "id": "69130740251", "role": "สมาชิก", "task": "ระบบ Login และหน้า Team", "photo": "wanachana-profile.png"}
+  ]
+}

@@ -1,0 +1,15 @@
+{% extends "auth_base.html" %}
+{% block auth_content %}
+<form class="auth-card" method="post">
+  <h2>สมัครสมาชิก</h2>
+  {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
+  <label for="username">ชื่อผู้ใช้</label>
+  <input id="username" name="username" type="text" autocomplete="username" minlength="3" required autofocus>
+  <label for="password">รหัสผ่าน</label>
+  <input id="password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+  <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+  <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" minlength="6" required>
+  <button type="submit">สร้างบัญชี</button>
+  <a class="auth-link" href="{{ url_for('login') }}">มีบัญชีแล้ว เข้าสู่ระบบ</a>
+</form>
+{% endblock %}

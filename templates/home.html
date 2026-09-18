@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="home-hero">
+  <div class="home-hero-copy">
+    <span class="eyebrow">PERSONAL FITNESS COMPANION</span>
+    <h1>ดูแลสุขภาพให้เป็นเรื่องง่าย<br><strong>เริ่มต้นวันนี้กับ FitCalc</strong></h1>
+    <p>{{ team.group.description }}</p>
+    <div class="home-actions">
+      <a class="home-primary" href="{{ url_for('page', name='page1') }}">เริ่มบันทึกข้อมูล <span>→</span></a>
+      <a class="home-secondary" href="{{ url_for('page', name='page3') }}">ดูท่าออกกำลังกาย</a>
+    </div>
+  </div>
+  <div class="home-hero-orbit" aria-hidden="true"><span>♥</span><b>FIT<br>CALC</b></div>
+</section>
+
+<section class="home-section-heading"><span>YOUR WELLNESS SPACE</span><h2>จัดการสุขภาพของคุณ</h2><p>เครื่องมือครบในที่เดียว เพื่อให้ทุกเป้าหมายเป็นไปได้</p></section>
+<section class="home-feature-grid">
+  <a class="home-feature profile-feature" href="{{ url_for('page', name='page1') }}"><span class="feature-icon">◉</span><span class="feature-label">01 · PROFILE</span><h3>ข้อมูลส่วนตัว</h3><p>บันทึกข้อมูลและเป้าหมายสุขภาพของคุณ</p><span class="feature-arrow">→</span></a>
+  <a class="home-feature calorie-feature" href="{{ url_for('page', name='page2') }}"><span class="feature-icon">◒</span><span class="feature-label">02 · CALORIES</span><h3>บันทึกแคลอรี่</h3><p>ติดตามอาหารและแคลอรี่ในแต่ละวัน</p><span class="feature-arrow">→</span></a>
+  <a class="home-feature workout-feature" href="{{ url_for('page', name='page3') }}"><span class="feature-icon">✦</span><span class="feature-label">03 · WORKOUT</span><h3>ตารางออกกำลังกาย</h3><p>คำแนะนำท่าออกกำลังกายพร้อมวิดีโอสอน</p><span class="feature-arrow">→</span></a>
+</section>
+<section class="home-quote"><span>“</span><p>ความเปลี่ยนแปลงที่ยิ่งใหญ่ เริ่มต้นจากก้าวเล็ก ๆ ในทุกวัน</p><small>FITCALC · GROUP 5</small>
+</section>
+
+<section class="dashboard-section">
+  <div class="home-section-heading"><span>YOUR DAILY SNAPSHOT</span><h2>สรุปสุขภาพของคุณ</h2><p>ข้อมูลล่าสุดจากสิ่งที่คุณบันทึกไว้</p></div>
+  <div class="dashboard-grid">
+    <article class="dashboard-card dashboard-bmi"><span class="dashboard-icon">⚖</span><div><small>BMI ล่าสุด</small><strong>{{ dashboard.bmi or '-' }}</strong><em>{% if dashboard.bmi %}ดัชนีมวลกาย{% else %}กรอกข้อมูลส่วนตัว{% endif %}</em></div></article>
+    <article class="dashboard-card dashboard-calories"><span class="dashboard-icon">◒</span><div><small>แคลอรี่วันนี้</small><strong>{{ dashboard.calories }} <b>/ {{ dashboard.calorie_goal or '-' }}</b></strong><div class="dashboard-progress"><i style="width: {{ dashboard.calorie_percent }}%;"></i></div><em>{{ dashboard.calorie_percent }}% ของเป้าหมาย</em></div></article>
+    <article class="dashboard-card dashboard-workout"><span class="dashboard-icon">✦</span><div><small>ความคืบหน้าออกกำลังกาย</small><strong>{{ dashboard.workout_percent }}%</strong><div class="dashboard-progress"><i style="width: {{ dashboard.workout_percent }}%;"></i></div><em>{{ dashboard.completed_days }}/{{ dashboard.duration }} วัน</em></div></article>
+    <article class="dashboard-card dashboard-weight"><span class="dashboard-icon">↕</span><div><small>น้ำหนักล่าสุด</small><strong>{{ dashboard.weight or '-' }} <b>กก.</b></strong><em>อัปเดตจากข้อมูลของคุณ</em></div></article>
+    <article class="dashboard-card dashboard-goal"><span class="dashboard-icon">⌁</span><div><small>เป้าหมายหลัก</small><strong>{{ dashboard.goal }}</strong><em>มุ่งมั่นต่อไปทุกวัน</em></div></article>
+  </div>
+</section>
+
+<section class="notification-panel">
+  <div>
+    <span class="eyebrow">DAILY REMINDERS</span>
+    <h2>ระบบแจ้งเตือนสุขภาพ</h2>
+    <p>เตือนดื่มน้ำ บันทึกมื้ออาหาร และเวลาออกกำลังกายขณะเปิดเว็บไซต์อยู่</p>
+  </div>
+  <div class="notification-controls">
+    <button class="btn" id="notification-enable" type="button">เปิดการแจ้งเตือน</button>
+    <span id="notification-status" class="notification-status">ยังไม่ได้เปิดใช้งาน</span>
+  </div>
+  <div class="reminder-grid">
+    <label><span>ดื่มน้ำ</span><input type="time" id="water-reminder" value="09:00"><input type="checkbox" id="water-enabled" checked></label>
+    <label><span>บันทึกมื้ออาหาร</span><input type="time" id="meal-reminder" value="12:00"><input type="checkbox" id="meal-enabled" checked></label>
+    <label><span>ออกกำลังกาย</span><input type="time" id="workout-reminder" value="18:00"><input type="checkbox" id="workout-enabled" checked></label>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="workout-page">
+  <div class="workout-heading">
+    <div><span class="eyebrow">MOVE WITH PURPOSE</span><h1>ตารางออกกำลังกาย</h1><p>รวมท่าออกกำลังกายที่ทำตามได้ง่าย พร้อมคำแนะนำที่ถูกต้อง</p></div>
+    <a class="btn workout-plan-btn" href="{{ url_for('workout_30_days') }}">ดูแผน 30 วัน <span>→</span></a>
+  </div>
+  <div class="workout-intro"><div class="workout-stat"><strong>{{ guides|length }}</strong><span>ท่าแนะนำ</span></div><div><strong>เริ่มต้นอย่างมั่นใจ</strong><p>เลือกเปิดดูแต่ละท่า แล้วทำตามขั้นตอนอย่างช้า ๆ</p></div><span class="workout-spark">✦</span></div>
+  <div class="workout-list">
+    <div class="exercise-guides main-guides">
+      {% for exercise in guides %}
+      <details class="exercise-guide">
+        <summary><span class="exercise-number">{{ '%02d'|format(loop.index) }}</span><span class="exercise-title">💪 {{ exercise.name }}<small>แนะนำ 3 เซต × 10 ครั้ง</small></span><span class="guide-toggle">ดูวิธีทำ <b>＋</b></span></summary>
+        <div class="guide-body">
+          <img class="guide-image" src="{{ exercise.img }}" alt="ภาพสาธิต {{ exercise.name }}" loading="lazy">
+          <ol>{% for step in exercise.steps %}<li>{{ step }}</li>{% endfor %}</ol>
+          <p class="guide-tip"><strong>คำแนะนำ:</strong> {{ exercise.tip }}</p>
+          <a class="video-link" href="https://www.youtube.com/results?search_query={{ exercise.query|urlencode }}" target="_blank" rel="noopener noreferrer">ดูคลิปวิดีโอสอนท่านี้บน YouTube ↗</a>
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
